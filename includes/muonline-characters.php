@@ -83,9 +83,6 @@ function muonline_show_characters($atts) {
                 // Get character attributes
                 $character_attributes = muonline_check_characters_attribute($character['Id'], $attribute_name_map);
 
-                // Replace the keys with attribute names
-                $resets_value = $character_attributes['Resets'];
-                $level_value = $character_attributes['Level'];
                 // Get character Zen
                 $zen_value = muonline_get_character_zen($character['InventoryId']);
                 
@@ -102,7 +99,43 @@ function muonline_show_characters($atts) {
 
         <table align="center" border="0" width="100%" height="324">
         <tbody><tr>
-            <td align="center" valign="middle" class="sblock" colspan="2" height="223"><img src="templates/bless/images/class/dw.jpg" title="Grand Master"></td>
+            <?php
+        function get_initials($name) {
+    $words = explode(" ", $name);
+    $initials = "";
+
+    foreach ($words as $w) {
+        $initials .= $w[0];
+    }
+
+    return strtolower($initials);
+}
+$imageName = get_initials($character['characterclass']['Name']) . '.jpg';
+
+    $stateText = 'New';  // default value
+    if ($character['State'] == 1) {
+        $stateText = 'Hero';
+    } else if ($character['State'] == 2) {
+        $stateText = 'Light Hero';
+    }
+    else if ($character['State'] == 3) {
+        $stateText = 'Normal';
+    }
+    else if ($character['State'] == 4) {
+        $stateText = 'Player Kill';
+    }
+    else if ($character['State'] == 5) {
+        $stateText = 'Player Kill 1st Stage';
+    }
+    else if ($character['State'] == 6) {
+        $stateText = 'Player Kill 2nd Stage';
+    }
+
+?>
+
+<td align="center" valign="middle" class="sblock" colspan="2" height="223">
+    <img src="/images/class/<?php echo $imageName; ?>" title="<?php echo $character['characterclass']['Name']; ?>">
+</td>
         </tr>
         <tr>
             <td align="center" class="sblock" colspan="2" height="25"><div class="title"><b>Guild</b></div></td>
@@ -133,19 +166,12 @@ function muonline_show_characters($atts) {
     <td align="left" class="sblock"><div class="title"><?php echo $character_attributes['Level']; ?></div></td>
 </tr>
 <tr>
-    <td align="left" class="sblock">Tributes</td>
-    <td align="left" class="sblock"><div class="title">283</div></td>
-</tr>
-<tr>
-    <td align="left" class="sblock">Grands</td>
-    <td align="left" class="sblock"><div class="title">0</div></td>
-</tr>
-<tr>
     <td align="left" class="sblock">Resets</td>
     <td align="left" class="sblock"><div class="title"><?php echo $character_attributes['Resets']; ?></div></td>
 </tr>
 <tr>
-    <td align="left" class="sblock">PK level</td><td align="left" class="sblock"><div class="title">Commoner (0)</div></td>
+    <td align="left" class="sblock">PK level</td><td align="left" class="sblock"><div class="title"><?php echo $stateText; ?> (<?php echo $character['State']; ?>)</div>
+</td>
 </tr>
 <tr>
     <td align="left" class="sblock">Location</td><td align="left" class="sblock"><div class="title">Lorencia (<?php echo $character['PositionX']; ?> x <?php echo $character['PositionY']; ?>)</div></td>
@@ -163,16 +189,16 @@ function muonline_show_characters($atts) {
     <td align="left" class="sblock">Energy</td><td align="left" class="sblock"><div class="title"><a style="cursor:help" class="toolinited"><?php echo $character_attributes['Base Energy']; ?></a></div></td>
 </tr>
 <tr>
-    <td align="left" class="sblock">Command</td><td align="left" class="sblock"><div class="title"><a style="cursor:help" class="toolinited">0</a></div></td>
+    <td align="left" class="sblock">Command</td><td align="left" class="sblock"><div class="title"><a style="cursor:help" class="toolinited"><?php echo $character_attributes['Command']; ?></a></div></td>
 </tr>
 <tr>
     <td align="left" class="sblock">Bought stats</td><td align="left" class="sblock"><div class="title">2000</div></td>
 </tr>
 <tr>
-    <td align="left" class="sblock">Achiev. points</td><td align="left" class="sblock"><div class="title">198</div></td>
+    <td align="left" class="sblock">Achiev. points</td><td align="left" class="sblock"><div class="title"><?php echo $character_attributes['Points per Level up']; ?></div></td>
 </tr>
 <tr>
-    <td align="left" class="sblock">Buff level</td><td align="left" class="sblock"><div class="title">198</div></td>
+    <td align="left" class="sblock">Buff level</td><td align="left" class="sblock"><div class="title"><?php echo $character_attributes['Master points per master Level up']; ?></div></td>
 </tr>
 <tr>
     <td align="left" class="sblock">Equipment</td><td align="left" class="sblock"><div class="title">0</div></td>
@@ -182,9 +208,6 @@ function muonline_show_characters($atts) {
 </tr>
 <tr>
     <td align="left" class="sblock">RQuest stats</td><td align="left" class="sblock"><div class="title">438</div></td>
-</tr>
-<tr>
-    <td align="left" class="sblock">ET level</td><td align="left" class="sblock"><div class="title">6</div></td>
 </tr>
 <tr>
     <td align="left" class="sblock">Server</td><td align="left" class="sblock"><div class="title2">Extreme-GS</div></td>
